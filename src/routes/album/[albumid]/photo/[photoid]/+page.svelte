@@ -1,6 +1,7 @@
 <script>
   import { page } from "$app/stores";
   import { onMount } from "svelte";
+  import ExifDetails from "../../../../../lib/components/ExifDetails.svelte";
 
   export let data;
 
@@ -11,7 +12,9 @@
   });
 </script>
 
-<img class="full-image" src="/images/{data.photo}" alt="asdas" />
+<img id="photoId" class="full-image" src="/images/{data.photo}" alt="" />
+
+<ExifDetails photoElementId="photoId" photo={data.photo} />
 
 <div class="photo-albums-area">
   <div class="photo-album-grid">

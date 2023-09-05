@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
 
   export let data;
   let selectedPhoto;
@@ -10,7 +11,8 @@
     selectedPhoto = data.album.images[2];
     console.log($page.params);
 
-    // if ($page.params.albumid && data.album.image && !$page.params.photoid) goto
+    if ($page.params.albumid && data.album.image && !$page.params.photoid)
+      goto("/album/" + $page.params.albumid + "/photo/" + data.album.image);
   });
 </script>
 

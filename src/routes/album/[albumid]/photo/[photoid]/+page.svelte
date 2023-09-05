@@ -1,14 +1,16 @@
 <script>
   import { page } from "$app/stores";
   import { onMount } from "svelte";
-  import ExifDetails from "../../../../../lib/components/ExifDetails.svelte";
+  import ExifDetails from "$lib/components/ExifDetails.svelte";
+  import { fetchPhotos, photoStore } from "$lib/stores/photoStore.js";
 
   export let data;
-
-  onMount(() => {
-    console.log($page.params);
-
-    if ($page.params.albumid) console.log($page.params.photoid);
+  let currentPhoto = null;
+  onMount(async () => {
+    await fetchPhotos();
+    currentPhoto = $photoStore.find(
+      (photo) => photo.id === $page.params.photoid
+    );
   });
 </script>
 

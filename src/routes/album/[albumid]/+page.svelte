@@ -2,17 +2,17 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import { fetchAlbums, albumStore } from "$lib/stores/albumStore.js";
 
   export let data;
   let selectedPhoto;
 
-  onMount(() => {
-    console.log(data);
-    selectedPhoto = data.album.images[2];
-    console.log($page.params);
+  onMount(async () => {
+    await fetchAlbums();
+    const currentAlbum = $albumStore.find((album) => album.id === data.albumid);
 
-    if ($page.params.albumid && data.album.image && !$page.params.photoid)
-      goto("/album/" + $page.params.albumid + "/photo/" + data.album.image);
+    if ($page.params.albumid && currentAlbum.image && !$page.params.photoid)
+      goto("/album/" + $page.params.albumid + "/photo/" + currentAlbum.image);
   });
 </script>
 
@@ -20,6 +20,20 @@
 
 <div class="photo-albums-area">
   <div class="photo-album-grid">
+    <!-- {#each $albumStore as album}
+      <a href="/album/{album.id}/photo/{album.image}">
+        <div class="grid-item">
+          <img
+            class="grid-item-photo"
+            src="/images/{album.image}"
+            alt="Makro album"
+          />
+          <div class="grid-item-caption">
+            <h1>{album.image}</h1>
+          </div>
+        </div>
+      </a>
+    {/each} -->
     {#each data.album.images as image}
       <a href="/album/{data.albumid}/photo/{image}">
         <div class="grid-item">

@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { page } from "$app/stores";
 
   export let data;
   let selectedPhoto;
@@ -7,15 +8,18 @@
   onMount(() => {
     console.log(data);
     selectedPhoto = data.album.images[2];
+    console.log($page.params);
+
+    // if ($page.params.albumid && data.album.image && !$page.params.photoid) goto
   });
 </script>
 
-<img src="/images/{selectedPhoto}" alt="asdas" />
+<img class="full-image" src="/images/{selectedPhoto}" alt="asdas" />
 
 <div class="photo-albums-area">
   <div class="photo-album-grid">
     {#each data.album.images as image}
-      <a href="/album/{image.id}">
+      <a href="/album/{data.albumid}/photo/{image}">
         <div class="grid-item">
           <img
             class="grid-item-photo"
@@ -34,30 +38,18 @@
 </div>
 
 <style>
-  #cf2 {
-    position: relative;
+  .full-image {
     width: 100vw;
-    height: 80vh;
-    overflow: hidden;
+    height: 75vh;
+    text-align: center;
+    margin-bottom: 5vh;
   }
 
-  #cf2 div.transparent {
-    opacity: 0;
-  }
-
-  #cf2 div.photo {
-    position: absolute;
-    top: 0;
-    width: 100vw;
-    height: 80vh;
-    object-fit: cover;
-    transition: opacity 1s ease-in-out, transform 10s;
-    background-size: cover;
-    background-position: center;
-  }
-
-  :global(#cf2 div.zoom) {
-    transform: scale(1.2);
+  .full-image img {
+    max-width: 100%;
+    height: clamp(10vh, 1000px, 75vh);
+    object-fit: contain;
+    transition: all 0.5s;
   }
   .photo-albums-area h1 {
     text-align: center;
